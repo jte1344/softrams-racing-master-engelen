@@ -1,0 +1,146 @@
+<div class="container-fluid">
+  <button id="addMemberButton" class="btn btn-primary pull-right" (click)="open(addMem)">Add Member</button>
+
+
+  <ng-template #addMem let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add Member</h4>
+      <button type="button" class="close border-0" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="goToAddMemberForm(firstName, lastName, jobTitle, team, status); modal.dismiss('Add click')">
+        <div class="form-group row w-100">
+          <label for="firstName" class="col-md-4 col-form-label text-md-right">First Name</label>
+          <div class="col-md-6">
+            <input type="text" id="firstName" [(ngModel)]="firstName" class="form-control" name="firstName" autofocus>
+          </div>
+        </div>
+        <div class="form-group row w-100">
+          <label for="lastName" class="col-md-4 col-form-label text-md-right">Last Name</label>
+          <div class="col-md-6">
+            <input type="text" id="lastName" [(ngModel)]="lastName" class="form-control" name="lastName">
+          </div>
+        </div>
+        <div class="form-group row w-100">
+          <label for="jobTitle" class="col-md-4 col-form-label text-md-right">Job Title</label>
+          <div class="col-md-6">
+            <input type="text" id="jobTitle" [(ngModel)]="jobTitle" class="form-control" name="jobTitle">
+          </div>
+        </div>
+        <div class="form-group row w-100">
+          <label for="team" class="col-md-4 col-form-label text-md-right">Racing Team</label>
+          <div class="col-md-6">
+            <select id="team" class="custom-select" [(ngModel)]="team" [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let team of teams">{{ team.teamName }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row w-100">
+          <label for="status" class="col-md-4 col-form-label text-md-right">Status</label>
+          <div class="col-md-6 row">
+            <label id="activeStatus" class="md-check lead px-3">
+              <input type="radio" [(ngModel)]="status" value="Active" name="status" /> Active
+            </label>
+            <label class="md-check lead px-3">
+              <input type="radio" [(ngModel)]="status" value="Inactive" name="status" /> Inactive
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div class="col-md-4 offset-md-4 ml-auto">
+          <button type="submit" class="btn w-100 btn-primary">
+            Add
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template #editMem let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit Member</h4>
+      <button type="button" class="close border-0" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="editMemberByID(members[memPos].id, members[memPos].firstName, members[memPos].lastName, members[memPos].jobTitle, members[memPos].team, members[memPos].status); modal.dismiss('Add click')">
+        <div class="form-group row w-100">
+          <label for="firstNameEdit" class="col-md-4 col-form-label text-md-right">First Name</label>
+          <div class="col-md-6">
+            <input type="text" id="firstNameEdit" [(ngModel)]="members[memPos].firstName" class="form-control" name="firstNameEdit" autofocus>
+          </div>
+        </div>
+        <div class="form-group row w-100">
+          <label for="lastNameEdit" class="col-md-4 col-form-label text-md-right">Last Name</label>
+          <div class="col-md-6">
+            <input type="text" id="lastNameEdit" [(ngModel)]="members[memPos].lastName" class="form-control" name="lastNameEdit">
+          </div>
+        </div>
+        <div class="form-group row w-100">
+          <label for="jobTitleEdit" class="col-md-4 col-form-label text-md-right">Job Title</label>
+          <div class="col-md-6">
+            <input type="text" id="jobTitleEdit" [(ngModel)]="members[memPos].jobTitle" class="form-control" name="jobTitleEdit">
+          </div>
+        </div>
+        <div class="form-group row w-100">
+          <label for="team" class="col-md-4 col-form-label text-md-right">Racing Team</label>
+          <div class="col-md-6">
+            <select id="team" class="custom-select" [(ngModel)]="members[memPos].team" [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let team of teams">{{ team.teamName }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row w-100">
+          <label for="status" class="col-md-4 col-form-label text-md-right">Status</label>
+          <div class="col-md-6 row">
+            <label id="activeStatus" class="md-check lead px-3">
+              <input type="radio" [(ngModel)]="members[memPos].status" value="Active" name="status" /> Active
+            </label>
+            <label class="md-check lead px-3">
+              <input type="radio" [(ngModel)]="members[memPos].status" value="Inactive" name="status" /> Inactive
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div class="col-md-4 offset-md-4 ml-auto">
+          <button type="submit" class="btn w-100 btn-primary">
+            Edit
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Member ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Job Title</th>
+        <th>Racing Team</th>
+        <th>Status</th>
+        <th class="text-center">Edit</th>
+        <th class="text-center">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor='let member of members'>
+        <td>{{member?.id}}</td>
+        <td>{{member?.firstName}}</td>
+        <td>{{member?.lastName}}</td>
+        <td>{{member?.jobTitle}}</td>
+        <td>{{member?.team}}</td>
+        <td>{{member?.status}}</td>
+        <td class="text-center"><button id="addMemberButton" class="btn btn-success shadow" (click)="getEditMemberByID(member?.id); open(editMem)">Edit Member</button></td>
+        <td class="text-center"><button id="addMemberButton" class="btn btn-danger shadow" (click)="deleteMemberById(member?.id)">Delete Member</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
